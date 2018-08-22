@@ -11,9 +11,9 @@
     "jest": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start:js": "react-scripts start",
-    "start:server": "node server/index.js",
-    "lint": "eslint src/**/*.js server/**/*.js",
-    "prettier": "prettier --write src/**/*.js server/**/*.js"
+    "start:server": "node mock-node-server/index.js",
+    "lint": "eslint src/**/*.js mock-node-server/**/*.js",
+    "prettier": "prettier --write src/**/*.js mock-node-server/**/*.js"
   },
   "dependencies": {
     "apollo-server-express": "^2.0.0",
