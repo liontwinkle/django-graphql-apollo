@@ -73,12 +73,14 @@ See [docs/create-react-app.md](./docs/create-react-app.md) for CRA documentation
 
 ## Backend challenge
 
-Use Django (v2+), graphene (v2+), and a SQL database (postgres, for migrations) to implement the following:
+Use Django (v2+), graphene (v2+), and a SQL database (postgres, for migrations) to implement the following, a blog:
 
 1. Post list page
 2. Post detail page
 3. Add/edit/delete post
 4. Author detail page (with author posts)
+5. Keep an up-to-date count of the posts created by an author
+6. As a bonus, to demonstrate your experience, use any advanced python or Django features to make an addition of your own
 
 **You don't have to finish all of these.** We would like to see at least one query and one mutation. We would prefer you focus on quality rather than quantity. Please include unit tests covering GraphQL queries/mutations.
 
