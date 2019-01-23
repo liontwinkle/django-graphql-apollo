@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party apps
+    'corsheaders',
     'graphene_django',
 
     # Our apps
@@ -50,6 +51,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Needs to be before most middleware
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,3 +141,6 @@ GRAPHENE = {
 }
 
 GRAPHQL_DEBUG = env('GRAPHQL_DEBUG', default=DEBUG)
+
+if DEBUG:
+    CORS_ORIGIN_ALLOW_ALL = True

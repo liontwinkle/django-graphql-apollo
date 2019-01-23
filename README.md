@@ -11,13 +11,16 @@ For a senior, we are looking at these criteria:
 * overall architecture and code quality (readability, decoupledness, etc)
 * file structure
 * naming
-* test coverage
+* test coverage (see instructions for [running tests](#running-tests))
 * proficiency
 
 If you wish to be a full-stack position, please attempt both of these.
 
 * [Frontend challenge](#frontend-challenge)
 * [Backend challenge](#backend-challenge)
+
+Please note there is a shared `.env` file for the environment variables. This file is used by
+frontend and backend. The `./docker-assist` script automatically copies the example for you.
 
 ## Frontend challenge
 
@@ -113,7 +116,7 @@ Main dependency is Docker and Compose.
 After you've got those:
 
 ```bash
-./d start  # if this fails, try ./d build first
+./docker-assist start  # if this fails, try ./d build first
 ```
 
 Wait a while and you're ready to go. It's a good idea to run `start` as-is (attached mode).
@@ -123,14 +126,23 @@ To start in daemon mode:
 
 ```bash
 cd server/
-./d start -d
+./docker-assist start -d
 ```
 
 Now you can go to http://localhost:5000, http://localhost:5000/graphql/, or http://localhost:5000/admin/ for the Django admin.
 
 Log in to the admin with the [sample test user](#sample-test-user) from below and try the sample query from the challenge.
 
-Feel free to inspect the `d` bash script to see other handy commands you can run.
+Feel free to inspect the `docker-assist` bash script to see other handy commands you can run.
+
+### Running tests
+
+Please run the tests, and lint your backend code. This helps us review code, as it's already consistent with this project.
+
+```bash
+./docker-assist lint
+./docker-assist test
+```
 
 The following are set up by docker containers. No need to install them yourself, this is just an overview:
 
