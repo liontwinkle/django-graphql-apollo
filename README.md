@@ -135,6 +135,14 @@ Log in to the admin with the [sample test user](#sample-test-user) from below an
 
 Feel free to inspect the `docker-assist` bash script to see other handy commands you can run.
 
+### Installing packages
+
+This project uses [Pipenv](https://pipenv.readthedocs.io/en/latest/). If you wish to add dependencies, `./docker-assist bash` into the container and then:
+```
+pipenv install <package name>  # this automatically adds it to the Pipfile and Pipfile.lock
+pipenv install --system --deploy --ignore-pipfile --dev  # install globally to avoid need to rebuild
+```
+
 ### Running tests
 
 Please run the tests, and lint your backend code. This helps us review code, as it's already consistent with this project.
