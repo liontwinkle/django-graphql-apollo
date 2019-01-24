@@ -10,5 +10,5 @@ class EnvTestCase(TestCase):
 
     def test_env_file_exists(self):
         """Test environment file exists."""
-        env_file = os.path.join(settings.DEFAULT_ENV_PATH, '.env')
+        env_file = os.path.join(settings.DEFAULT_ENV_PATH, ".env")
         assert os.path.exists(env_file)

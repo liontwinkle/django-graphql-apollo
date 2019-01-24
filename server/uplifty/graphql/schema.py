@@ -18,4 +18,4 @@ class Mutation(graphene.ObjectType):
     class Meta:
         abstract = True
 
-    logout_user = LogoutUser.Field(description='Log the user out.')
+    logout_user = LogoutUser.Field(description="Log the user out.")
