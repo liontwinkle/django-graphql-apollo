@@ -28,7 +28,10 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,md,css,scss}": ["prettier --write", "git add"]
+    "*.{js,jsx,ts,tsx,json,md,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "apollo-server-express": "^2.3.2",
@@ -36,6 +39,7 @@
     "faker": "^4.1.0",
     "graphql": "^14.1.1",
     "lodash": "^4.17.11",
+    "node-sass": "^4.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.3"
