@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npm-run-all -p start:js start:server",
     "build": "react-scripts build",
-    "test": "npm-run-all lint jest",
+    "test": "npm-run-all jest eslint prettier:check",
     "jest": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start:js": "react-scripts start",
