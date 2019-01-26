@@ -25,5 +25,9 @@ pytest-flakes = ">=4.0.0"
 "pytest-pep8" = ">=1.0.6"
 django-environ = "*"
 pylama = "*"
-"autopep8" = "*"
 graphene = "*"
+black = "*"
+django-cors-headers = "*"
+
+[pipenv]
+allow_prereleases = true

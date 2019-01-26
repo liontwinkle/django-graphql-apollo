@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script pulls together frequent commands for orchestrating
+# our docker setup.
 
 cd "$(dirname $0)"
 
@@ -6,19 +8,21 @@ task=$1 # More descriptive name
 arg=$2
 args=${*:2}
 
+# Copy the env file if it doesn't exist
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
+source .env
+
 case $task in
     build)
         # Build docker containers. Pass --no-cache to force re-downloading of images.
-        # See ./d build --help for additional info
-
-        if [ ! -f .env ]; then
-          cp .env.example .env
-        fi
+        # See build --help for additional info
         docker-compose build $args
         ;;
     start)
         # Start docker containers.
-        # See ./d up --help for additional info
+        # See up --help for additional info
         docker-compose up $args
         ;;
     stop)
@@ -59,9 +63,17 @@ case $task in
         docker exec -it uplifty python manage.py shell
         ;;
     lint)
-        # Lint server code automatically with autopep8.
+        # Lint server code automatically with black and autoflake
         # WARNING: This updates files in-place.
-        docker exec -it uplifty autopep8 . --in-place --recursive --global-config setup.cfg
+        docker exec uplifty black /code/server
+        docker exec uplifty autoflake . --in-place --recursive --remove-all-unused-imports --remove-duplicate-keys --remove-unused-variables
+        ;;
+    security-check)
+        # Security vulnerability checks
+        # Check packages
+        docker exec server pipenv check --system
+        # Check files, except tests. See also server/.bandit config
+        docker exec server bandit -r .
         ;;
     dbshell)
         # SSH (bash) into database container.
@@ -70,8 +82,7 @@ case $task in
         ;;
     cleandb)
         # Drop the local database.
-        docker exec -it db psql -U postgres -d uplifty -c
-        docker exec -it db psql -h db -U postgres -c "DROP DATABASE IF EXISTS uplifty"
+        docker exec -it uplifty-db psql -h db -U postgres -c "DROP DATABASE IF EXISTS uplifty"
         ;;
     migrate)
         # Run database migrations.
@@ -95,8 +106,12 @@ case $task in
             sleep 0.5
         done
 
-        docker exec -it uplifty-db-test psql -U postgres -c "DROP DATABASE IF EXISTS uplifty"
-        docker exec -it uplifty-db-test psql -U postgres -c "CREATE DATABASE uplifty"
+
+        if [[ ! $args =~ "--reuse-db"* ]]; then
+            echo "Drop and create the database(s)"
+            docker exec -it uplifty-db-test psql -U postgres -c "DROP DATABASE IF EXISTS uplifty" > /dev/null 2>&1
+            docker exec -it uplifty-db-test psql -U postgres -c "CREATE DATABASE uplifty" > /dev/null 2>&1
+        fi
 
         docker run \
             -it --rm \
@@ -107,11 +122,30 @@ case $task in
             -e IS_TESTING=true \
             uplifty \
             test $args
+
+        ;;
+    'help')
+        scriptname=`basename "$0"`
+        echo 'Usage: ./'$scriptname' action [params]. Available actions:'
+        echo '    build: build or rebuild containers'
+        echo '    start: start containers'
+        echo '    stop: stop containers'
+        echo '    clean: remove containers and test containers, including databases'
+        echo '    bash: bash into the server container'
+        echo '    shell: start django shell'
+        echo '    migrate: run django migrations'
+        echo '    lint: lint server (python) code'
+        echo '    bashdb: bash into the database container'
+        echo '    cleandb: drop database'
+        echo '    dbshell: psql into the database'
+        echo '    security-check: run a security check for server-side vulnerabilities'
         ;;
     '')
-        echo 'Usage: ./d action [params]. For a list of actions, run ./d help'
+        scriptname=`basename "$0"`
+        echo 'Usage: ./'$scriptname' action [params]. For a list of actions, run ./'$scriptname' help'
         ;;
     *)
-        echo 'Unknown action '$task'. For a list of the available actions, run ./d help'
+        scriptname=`basename "$0"`
+        echo 'Unknown action '$task'. For a list of the available actions, run ./'$scriptname' help'
         ;;
 esac
