@@ -8,5 +8,6 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': 0,
     'react/jsx-one-expression-per-line': 0,
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 }

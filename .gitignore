@@ -28,3 +28,4 @@ server/static
 *.pyc
 __pycache__
 .pytest_cache
+storybook-static
