@@ -13,8 +13,8 @@
     "start:js": "react-scripts start",
     "start:server": "node mock-node-server/index.js",
     "eslint": "eslint \"src/\" --ext .js,.jsx,.ts,.tsx",
-    "prettier:write": "prettier --write src/**/*.{js,jsx,ts,tsx,json,md,css,scss}",
-    "prettier:check": "prettier --list-different src/**/*.{js,jsx,ts,tsx,json,md,css,scss}",
+    "prettier:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,md,css,scss}\"",
+    "prettier:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,json,md,css,scss}\"",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
