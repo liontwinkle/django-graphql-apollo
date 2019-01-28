@@ -1,0 +1,95 @@
+version: 2.1
+
+aliases:
+  - &npm-install |
+    npm install
+
+  - &restore-npm-cache
+    keys:
+      - npm-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - npm-{{ .Branch }}-
+
+  - &save-npm-cache
+    paths:
+      - node_modules
+    key: npm-{{ .Branch }}-{{ checksum "package-lock.json" }}
+
+executors:
+  default_executor:
+    docker:
+      - image: circleci/node:8
+
+jobs:
+  install:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: *npm-install
+      - save_cache: *save-npm-cache
+
+  jest:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: npm run jest
+
+  eslint:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: npm run eslint
+
+  prettier:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: npm run prettier:check
+
+  audit:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: npm audit
+
+  build:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: npm run build
+
+  storybook:
+    executor: default_executor
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+      - run: npm run build-storybook
+
+workflows:
+  version: 2
+  build_test_and_publish:
+    jobs:
+      - install
+      - jest:
+          requires:
+            - install
+      - eslint:
+          requires:
+            - install
+      - prettier:
+          requires:
+            - install
+      - audit:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
+      - storybook:
+          requires:
+            - install

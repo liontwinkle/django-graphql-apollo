@@ -8,16 +8,16 @@ this setup.
 
 For a senior, we are looking at these criteria:
 
-* overall architecture and code quality (readability, decoupledness, etc)
-* file structure
-* naming
-* test coverage (see instructions for [running tests](#running-tests))
-* proficiency
+- overall architecture and code quality (readability, decoupledness, etc)
+- file structure
+- naming
+- test coverage (see instructions for [running tests](#running-tests))
+- proficiency
 
 If you wish to be a full-stack position, please attempt both of these.
 
-* [Frontend challenge](#frontend-challenge)
-* [Backend challenge](#backend-challenge)
+- [Frontend challenge](#frontend-challenge)
+- [Backend challenge](#backend-challenge)
 
 Please note there is a shared `.env` file for the environment variables. This file is used by
 frontend and backend. The `./docker-assist` script automatically copies the example for you.
@@ -72,7 +72,7 @@ Then:
 
 Your browser will automatically open to http://localhost:3000 by Create React App. Changes should be reflected automatically.
 
-See [docs/create-react-app.md](./docs/create-react-app.md) for CRA documentation.
+See [CRA documentation](https://facebook.github.io/create-react-app/).
 
 ## Backend challenge
 
@@ -110,8 +110,8 @@ On MacOS, use [brew](https://brew.sh/) to manage installation of supporting prog
 
 Main dependency is Docker and Compose.
 
-* Install [Docker](https://docs.docker.com/docker-for-mac/install/)
-* Install [Compose](https://docs.docker.com/compose/install/)
+- Install [Docker](https://docs.docker.com/docker-for-mac/install/)
+- Install [Compose](https://docs.docker.com/compose/install/)
 
 After you've got those:
 
@@ -138,6 +138,7 @@ Feel free to inspect the `docker-assist` bash script to see other handy commands
 ### Installing packages
 
 This project uses [Pipenv](https://pipenv.readthedocs.io/en/latest/). If you wish to add dependencies, `./docker-assist bash` into the container and then:
+
 ```
 pipenv install <package name>  # this automatically adds it to the Pipfile and Pipfile.lock
 pipenv install --system --deploy --ignore-pipfile --dev  # install globally to avoid need to rebuild
@@ -156,17 +157,17 @@ The following are set up by docker containers. No need to install them yourself,
 
 ### Server architecture
 
-* PostgreSQL 10+
-* Python 3.6+
-* Django 2
-* [django-environ](https://github.com/joke2k/django-environ) for easy environment configuration via `.env` files
+- PostgreSQL 10+
+- Python 3.6+
+- Django 2
+- [django-environ](https://github.com/joke2k/django-environ) for easy environment configuration via `.env` files
 
 ### Sample test user
 
 The database is created with a sample test user:
 
-| Name     | Value               |
-|----------|-------------------------|
+| Name     | Value                   |
+| -------- | ----------------------- |
 | Username | interview               |
 | Email    | interview@uplift.agency |
 | Password | uplifty                 |
