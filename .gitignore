@@ -29,3 +29,6 @@ server/static
 __pycache__
 .pytest_cache
 storybook-static
+
+# Editor
+.vscode

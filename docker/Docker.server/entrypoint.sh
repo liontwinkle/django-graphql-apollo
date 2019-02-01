@@ -24,10 +24,6 @@ function assets {
     python manage.py collectstatic --noinput
 }
 
-function prepare {
-    :
-}
-
 function supervisor {
     exec /usr/bin/supervisord -c /code/docker/Docker.server/supervisord-dev.conf
 }
@@ -35,13 +31,6 @@ function supervisor {
 function development {
     migrate
     mockdata
-    assets
-    supervisor
-}
-
-function production {
-    prepare
-    migrate
     assets
     supervisor
 }

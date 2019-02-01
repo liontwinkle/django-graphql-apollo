@@ -2,6 +2,7 @@
 # This script pulls together frequent commands for orchestrating
 # our docker setup.
 
+set -x
 cd "$(dirname $0)"
 
 task=$1 # More descriptive name
@@ -31,21 +32,8 @@ case $task in
         ;;
     clean)
         # Remove docker containers (if they exist)
-        if docker inspect uplifty-db > /dev/null 2> /dev/null; then
-            docker rm -f uplifty-db
-        fi
-        if docker inspect uplifty-db-test > /dev/null 2> /dev/null; then
-            docker rm -f uplifty-db-test
-        fi
-        if docker inspect uplifty > /dev/null 2> /dev/null; then
-            docker rm -f uplifty
-        fi
-        if docker image inspect uplifty-db > /dev/null 2> /dev/null; then
-            docker rmi uplifty-db
-        fi
-        if docker image inspect uplifty > /dev/null 2> /dev/null; then
-            docker rmi uplifty
-        fi
+        # Run this with --rmi all to remove the mysql image too
+        docker-compose down --rmi local
         ;;
     bash)
         # SSH (bash) into server container.
@@ -62,11 +50,23 @@ case $task in
         # Useful for running Django shell commands.
         docker exec -it uplifty python manage.py shell
         ;;
+    install-local)
+        # Install package, e.g. ./docker-assist install --dev django_extensions
+        docker exec -it uplifty pipenv install $args
+        ;;
+    install-system)
+        # Install/reinstall from pipenv
+        docker exec -it server pipenv install --system --deploy --ignore-pipfile --dev
+        ;;
     lint)
         # Lint server code automatically with black and autoflake
         # WARNING: This updates files in-place.
         docker exec uplifty black /code/server
         docker exec uplifty autoflake . --in-place --recursive --remove-all-unused-imports --remove-duplicate-keys --remove-unused-variables
+        if ! git diff-index --quiet HEAD --; then
+            echo "Changes made. See git diff"
+            exit 1
+        fi
         ;;
     security-check)
         # Security vulnerability checks
@@ -86,43 +86,15 @@ case $task in
         ;;
     migrate)
         # Run database migrations.
-        docker exec -it uplifty python manage.py migrate $args
+        docker exec -it server python manage.py migrate $args
         ;;
     test)
-        # Run the tests against a test database, from a test container.
-        # Useful for running Django shell commands.
-        if ! docker inspect uplifty-db-test > /dev/null 2> /dev/null; then
-             docker run \
-                --detach \
-                --name uplifty-db-test \
-                --env-file=.env \
-                postgres
-        fi
-
-        docker start uplifty-db-test > /dev/null
-
-        # in a while loop wait for the db test container to really start
-        until docker exec -it uplifty-db-test psql -U postgres -c '\q' > /dev/null 2> /dev/null; do
-            sleep 0.5
-        done
-
-
-        if [[ ! $args =~ "--reuse-db"* ]]; then
-            echo "Drop and create the database(s)"
-            docker exec -it uplifty-db-test psql -U postgres -c "DROP DATABASE IF EXISTS uplifty" > /dev/null 2>&1
-            docker exec -it uplifty-db-test psql -U postgres -c "CREATE DATABASE uplifty" > /dev/null 2>&1
-        fi
-
-        docker run \
-            -it --rm \
+        echo "Running tests with cache (use --cache-clear otherwise)..."
+        docker-compose run \
+            --rm \
             --name uplifty-test \
-            --link uplifty-db-test:db \
-            -v $(pwd):/code:rw \
-            --env-file=.env \
-            -e IS_TESTING=true \
             uplifty \
-            test $args
-
+            pytest --pylama $args
         ;;
     'help')
         scriptname=`basename "$0"`
@@ -130,14 +102,14 @@ case $task in
         echo '    build: build or rebuild containers'
         echo '    start: start containers'
         echo '    stop: stop containers'
-        echo '    clean: remove containers and test containers, including databases'
+        echo '    clean: remove containers, including databases'
         echo '    bash: bash into the server container'
         echo '    shell: start django shell'
         echo '    migrate: run django migrations'
         echo '    lint: lint server (python) code'
         echo '    bashdb: bash into the database container'
         echo '    cleandb: drop database'
-        echo '    dbshell: psql into the database'
+        echo '    dbshell: start database cli'
         echo '    security-check: run a security check for server-side vulnerabilities'
         ;;
     '')

@@ -28,7 +28,6 @@ ADD .env /code
 ADD docker /code
 
 # Install python requirements
-# TODO: don't pass --dev in production
 RUN pipenv install --system --deploy --ignore-pipfile --dev
 
 RUN groupadd -r app -g 1000 && \

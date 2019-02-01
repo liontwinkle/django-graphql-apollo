@@ -2,11 +2,23 @@
 
 Welcome!
 
+## Intro
+
 This repository contains the Uplift coding "challenge", if you can call it that.
 We believe in letting you work as freely as you want within the constraints of
-this setup.
+this setup. Our goals are to assess:
 
-For a senior, we are looking at these criteria:
+- that you can follow specs/requirement docs, making pragmatic decisions along the way
+- your level of expertise (mid-level=good approach, expert level=teach us something we don't know)
+
+## Table of Contents
+
+1. [Challenge criteria](#challenge-criteria)
+1. [General instructions](#general-instructions)
+1. [Frontend challenge](#frontend-challenge)
+1. [Backend challenge](#backend-challenge)
+
+## Challenge criteria
 
 - overall architecture and code quality (readability, decoupledness, etc)
 - file structure
@@ -14,13 +26,21 @@ For a senior, we are looking at these criteria:
 - test coverage (see instructions for [running tests](#running-tests))
 - proficiency
 
-If you wish to be a full-stack position, please attempt both of these.
+If you wish to work full-stack, please attempt both of these:
 
 - [Frontend challenge](#frontend-challenge)
 - [Backend challenge](#backend-challenge)
 
-Please note there is a shared `.env` file for the environment variables. This file is used by
-frontend and backend. The `./docker-assist` script automatically copies the example for you.
+## General instructions
+
+- Please note there is a shared `.env` file for environment variables. This file is used by
+  frontend and backend. The `./docker-assist` script automatically copies the example for you.
+- Please lint and explain your code (even just briefly). For python, order imports (see backend section).
+- After completing the challenge to a level that you're satisfied shows off your expertise,
+  open a pull request against master (can open two separate ones if you're doing frontend + backend)
+- In your PR add a description explaining anything you think is worthwhile, and/or just summarizing
+  your approach.
+- The repo uses CircleCI to run tests and lint checks on your PR. We'd like to see those passing.
 
 ## Frontend challenge
 
@@ -30,9 +50,11 @@ Use React (v16+), Apollo (v2+), and React Router (v4+) to implement the followin
 2. Post detail page
 3. Add/edit/delete post
 4. Author detail page (with author posts)
-
-**You don't have to finish all of these.** We would like to see at least one query and one mutation,
-and the database models associated with them. We would prefer you focus on quality rather than quantity.
+5. Something interesting that shows off your expertise.
+   - Examples: post drafts/publishing, versioning, auth, multiple authors, etc.
+   - Can also be a piece of code you already wrote, unrelated to this project.
+   - Showcase something cool visually (animated gif, video), or in code and explain
+    why it is cool so that it's super easy to understand.
 
 Please write tests.
 
@@ -78,14 +100,17 @@ See [CRA documentation](https://facebook.github.io/create-react-app/).
 
 Use Django (v2+), graphene (v2+), and a SQL database (postgres, for migrations) to implement the following, a blog:
 
-1. Post list page
-2. Post detail page
-3. Add/edit/delete post
+1. Post model and API to list posts
+2. API to get a specific post
+3. API to add/edit/delete post
 4. Keep an up-to-date count of the posts created by an author
 5. Author detail page (with author posts)
-6. As a bonus, to demonstrate your experience, use any advanced python or Django features to make an addition of your own
-
-**You don't have to finish all of these.** We would like to see at least one query and one mutation. We would prefer you focus on quality rather than quantity. Please include unit tests covering GraphQL queries/mutations.
+6. Something interesting that shows off your expertise.
+   - Examples: post drafts/publishing, versioning, auth, multiple authors,
+     use any advanced python or Django features to make an addition of your own, etc.
+   - Can also be a piece of code you already wrote, unrelated to this project.
+   - Showcase something cool visually (animated gif, video), or in code and explain
+     why it is cool so that it's super easy to understand.
 
 You can implement your own database architecture (models) and your own GraphQL schema. You do not have to copy the playground schema (mentioned below), although you can use it for inspiration.
 
