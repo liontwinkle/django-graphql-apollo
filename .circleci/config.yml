@@ -14,6 +14,14 @@ aliases:
       - node_modules
     key: npm-{{ .Branch }}-{{ checksum "package-lock.json" }}
 
+  - &persist-workspace
+    root: .
+    paths:
+      - node_modules
+
+  - &attach-workspace
+    at: .
+
 executors:
   default_executor:
     docker:
@@ -31,47 +39,48 @@ jobs:
       - restore_cache: *restore-npm-cache
       - run: *npm-install
       - save_cache: *save-npm-cache
+      - persist_to_workspace: *persist-workspace
 
   jest:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run jest
 
   eslint:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run eslint
 
   prettier:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run prettier:check
 
   audit:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm audit
 
   build:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run build
 
   storybook:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run build-storybook
 
   pytest-and-lint:
