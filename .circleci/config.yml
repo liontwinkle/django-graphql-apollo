@@ -38,6 +38,12 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run: *npm-install
+      - run:
+          name: Install node-prune
+          command: curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash
+      - run:
+          name: Run node-prune
+          command: ./bin/node-prune
       - save_cache: *save-npm-cache
       - persist_to_workspace: *persist-workspace
 
