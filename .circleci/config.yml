@@ -14,6 +14,14 @@ aliases:
       - node_modules
     key: npm-{{ .Branch }}-{{ checksum "package-lock.json" }}
 
+  - &persist-workspace
+    root: .
+    paths:
+      - node_modules
+
+  - &attach-workspace
+    at: .
+
 executors:
   default_executor:
     docker:
@@ -30,48 +38,55 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run: *npm-install
+      - run:
+          name: Install node-prune
+          command: curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash
+      - run:
+          name: Run node-prune
+          command: ./bin/node-prune
       - save_cache: *save-npm-cache
+      - persist_to_workspace: *persist-workspace
 
   jest:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run jest
 
   eslint:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run eslint
 
   prettier:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run prettier:check
 
   audit:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm audit
 
   build:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run build
 
   storybook:
     executor: default_executor
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - attach_workspace: *attach-workspace
       - run: npm run build-storybook
 
   pytest-and-lint:
