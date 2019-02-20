@@ -10,12 +10,3 @@ class Author(DjangoObjectType):
 
     class Meta:
         model = User
-        # only_fields = ("email", "username")
-
-    # def resolve_title(self, info, **kwargs):
-    #     """Keep email private except if you're the current user."""
-    #     print("POST TYPE RESOLVER: ", info.context)
-    #     post_id = info.context.post_id
-    #     post = User.objects.get(id=post_id)
-    #     title = post.title
-    #     return title

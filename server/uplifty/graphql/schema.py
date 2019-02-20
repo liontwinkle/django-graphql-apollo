@@ -42,18 +42,15 @@ class Query(graphene.ObjectType):
 
     def resolve_posts(self, info, **kwargs):
         """Resolve all blog posts."""
-        print("Resolving Post list: ", info.context)
         return Post.objects.order_by("-created_at").all()
 
     def resolve_post(self, info, id=None, **kwargs):
         """Resolve a single post."""
-        print("Resolving Single Post: ", info.context)
         if id:
             return Post.objects.get(id=id)
 
     def resolve_author(self, info, id=None, username=None, **kwargs):
         """Resolve Author profile."""
-        print("IN AUTHOR FIELD: ", id, username)
         if id:
             return User.objects.get(id=id)
         if username:

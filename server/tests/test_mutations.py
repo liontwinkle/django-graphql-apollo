@@ -7,7 +7,6 @@ from uplifty.data import initialize
 from uplifty.schema import schema
 from uplifty.models import Post
 
-# from uplifty.models import Post, User
 
 pytestmark = pytest.mark.django_db
 
