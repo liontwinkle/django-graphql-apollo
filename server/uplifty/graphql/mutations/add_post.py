@@ -2,6 +2,7 @@
 
 import graphene
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 from uplifty.models import Post
 
@@ -24,11 +25,19 @@ class AddPost(graphene.Mutation):
 
     def mutate(self, info, title, body, author, **kwargs):
         """Create new blog post."""
-        author = User.objects.get(username=author)
-        new_post = Post.objects.create(title=title, body=body, author=author)
+        author_model = User.objects.get(username=author)
+        slug = slugify(title)
+        new_post = Post.objects.create(
+            title=title, body=body, author=author_model, slug=slug
+        )
         new_post.save()
         return AddPost(
-            success=True, id=new_post.id, title=new_post.title, body=new_post.body
+            success=True,
+            id=new_post.id,
+            title=new_post.title,
+            body=new_post.body,
+            created_at=new_post.created_at,
+            # author=author,
         )
 
 
