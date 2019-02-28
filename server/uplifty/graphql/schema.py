@@ -37,17 +37,19 @@ class Query(graphene.ObjectType):
     """Query for blog post."""
 
     posts = graphene.List(PostNode)
-    post = graphene.Field(PostNode, id=graphene.UUID())
+    post = graphene.Field(PostNode, id=graphene.UUID(), slug=graphene.String())
     author = graphene.Field(AuthorNode, id=graphene.Int(), username=graphene.String())
 
     def resolve_posts(self, info, **kwargs):
         """Resolve all blog posts."""
         return Post.objects.order_by("-created_at").all()
 
-    def resolve_post(self, info, id=None, **kwargs):
+    def resolve_post(self, info, id=None, slug=None, **kwargs):
         """Resolve a single post."""
         if id:
             return Post.objects.get(id=id)
+        if slug:
+            return Post.objects.get(slug=slug)
 
     def resolve_author(self, info, id=None, username=None, **kwargs):
         """Resolve Author profile."""
