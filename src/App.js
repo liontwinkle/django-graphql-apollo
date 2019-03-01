@@ -1,17 +1,22 @@
 import React from 'react'
-import logo from './logo.svg'
+import { Switch, Route } from 'react-router-dom'
+import NavMenu from './components/Navigation'
+import PostList from './components/PostList'
+import BlogPost from './components/BlogPost'
+import AuthorPage from './components/Author'
 import './App.css'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Welcome to React</h1>
-      </header>
-      <p className="App-intro">
-        To get started, edit <code>src/App.js</code> and save to reload.
-      </p>
+      <NavMenu />
+      <div>
+        <Switch>
+          <Route exact path="/" component={PostList} />
+          <Route path="/blog/:slug" component={BlogPost} />
+          <Route path="/author/:username" component={AuthorPage} />
+        </Switch>
+      </div>
     </div>
   )
 }
