@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Flex, Box, Heading, Text } from 'rebass'
 import { Link } from 'react-router-dom'
@@ -49,17 +50,18 @@ const IconsContainer = styled(Flex)`
 class PostCard extends Component {
   constructor(props) {
     super(props)
+    // eslint-disable-next-line react/destructuring-assignment
     this.state = this.props.data
   }
 
-  handleInputChange(event) {
+  handleInputChange = event => {
     const { value, name } = event.target
     this.setState({
       [name]: value,
     })
   }
 
-  clearState() {
+  clearState = () => {
     this.setState({ author: '', title: '', body: '' })
   }
 
@@ -100,7 +102,7 @@ class PostCard extends Component {
               mutation={EDIT_MUTATION}
               variables={{ id, title, body }}
             >
-              {(editMutation, { data, loading, error }) => (
+              {(editMutation, { data, error }) => (
                 <Box>
                   {/* {console.log('Loading: ', loading)}
                   {console.log('Error: ', error)} */}
@@ -134,8 +136,8 @@ class PostCard extends Component {
                           title={title}
                           body={body}
                           mutation={editMutation}
-                          handleInputChange={this.handleInputChange.bind(this)}
-                          clearState={this.clearState.bind(this)}
+                          handleInputChange={this.handleInputChange}
+                          clearState={this.clearState}
                         />
                       </Box>
                     </Popup>
@@ -149,6 +151,16 @@ class PostCard extends Component {
       </Flex>
     )
   }
+}
+
+PostCard.propTypes = {
+  data: PropTypes.shape({
+    author: { username: PropTypes.string, email: PropTypes.string },
+    title: PropTypes.string,
+    body: PropTypes.string,
+    createdAt: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
 }
 
 export default PostCard

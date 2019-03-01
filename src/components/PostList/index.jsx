@@ -43,31 +43,22 @@ const StyledPlus = styled(GoDiffAdded)`
 class PostList extends Component {
   constructor(props) {
     super(props)
-    this.state = { author: '', title: '', body: '', data: null }
-    // this.clearState = this.clearState.bind(this)
-    // this.handleIntputChange = this.handleInputChange.bind(this)
+    this.state = { author: '', title: '', body: '' }
   }
 
-  // getPostId = postId => {
-  //   const findPost = post => post.id === postId
-  //   const post = this.state.data.posts.find(findPost)
-  //   console.log(post)
-  // }
-
-  handleInputChange(event) {
+  handleInputChange = event => {
     const { value, name } = event.target
     this.setState({
       [name]: value,
     })
   }
 
-  clearState() {
+  clearState = () => {
     this.setState({ author: '', title: '', body: '' })
   }
 
   render() {
     const { author, title, body } = this.state
-    console.log(author, title, body)
     return (
       <div>
         <Flex m={3} flexDirection="column" justifyContent="center">
@@ -84,48 +75,43 @@ class PostList extends Component {
               }}
               mutation={ADD_POST_MUTATION}
               variables={{ author, title, body }}
-              onCompleted={console.log('Mutation Completed!')}
               awaitRefetchQueries
             >
-              {(addPostMutation, { data, loading, error }) => (
+              {(addPostMutation, { data, error }) => (
                 <div>
-                  {console.log('Loading: ', loading)}
-                  {console.log('Error in PostList: ', error)}
-                  <div>
-                    <Popup
-                      contentStyle={{ width: '75%' }}
-                      modal
-                      closeOnDocumentClick
-                      trigger={<StyledPlus size={30} />}
-                    >
-                      <Heading>Create a new blog post</Heading>
-                      {error ? (
-                        <Box>
-                          <GoIssueOpened color="red" size={28} />
-                          <Heading>Error in creating new blog post:</Heading>
-                          <div>{`${error}`}</div>
-                        </Box>
-                      ) : null}
-
-                      {data && data.addPost.success && (
-                        <Box m={2}>
-                          <GoIssueClosed color="green" size={28} />
-                          Successfully created new post.
-                        </Box>
-                      )}
+                  <Popup
+                    contentStyle={{ width: '75%' }}
+                    modal
+                    closeOnDocumentClick
+                    trigger={<StyledPlus size={30} />}
+                  >
+                    <Heading>Create a new blog post</Heading>
+                    {error ? (
                       <Box>
-                        <PostForm
-                          author={author}
-                          title={title}
-                          body={body}
-                          mutation={addPostMutation}
-                          handleInputChange={this.handleInputChange.bind(this)}
-                          clearState={this.clearState.bind(this)}
-                        />
+                        <GoIssueOpened color="red" size={28} />
+                        <Heading>Error in creating new blog post:</Heading>
+                        <div>{`${error}`}</div>
                       </Box>
-                    </Popup>
-                    <Box my={2}>Add a new post</Box>
-                  </div>
+                    ) : null}
+
+                    {data && data.addPost.success && (
+                      <Box m={2}>
+                        <GoIssueClosed color="green" size={28} />
+                        Successfully created new post.
+                      </Box>
+                    )}
+                    <Box>
+                      <PostForm
+                        author={author}
+                        title={title}
+                        body={body}
+                        mutation={addPostMutation}
+                        handleInputChange={this.handleInputChange}
+                        clearState={this.clearState}
+                      />
+                    </Box>
+                  </Popup>
+                  <Box my={2}>Add a new post</Box>
                 </div>
               )}
             </Mutation>
@@ -139,7 +125,6 @@ class PostList extends Component {
             {({ loading, error, data }) => {
               if (loading) return <div>Loading...</div>
               if (error) return <div>Error</div>
-              if (data) this.state.data = data
               return data.posts.map(post => (
                 <PostCard
                   key={post.id}

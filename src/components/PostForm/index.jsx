@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Box } from 'rebass'
 import styled from 'styled-components'
 import { GoCheck, GoX } from 'react-icons/go'
@@ -30,6 +31,7 @@ const PostForm = ({ author, title, body, mutation, handleInputChange, clearState
         <Box m={2}>
           <Box my={1}>Author:</Box>
           <input
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             type="text"
             name="author"
@@ -61,17 +63,20 @@ const PostForm = ({ author, title, body, mutation, handleInputChange, clearState
             placeholder="Blog post body content"
           />
         </Box>
-        <SubmitFormButton
-          type="submit"
-          value="Submit"
-          onSubmit={() => console.log('ON SUBMIT')}
-          onClick={mutation}
-          size={33}
-        />
+        <SubmitFormButton type="submit" value="Submit" onClick={mutation} size={33} />
         <ClearFormButton onClick={() => clearState()} color="red" size={33} />
       </InputForm>
     </div>
   )
+}
+
+PostForm.propTypes = {
+  author: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  mutation: PropTypes.func.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  clearState: PropTypes.func.isRequired,
 }
 
 export default PostForm

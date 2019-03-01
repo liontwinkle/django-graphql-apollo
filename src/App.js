@@ -4,7 +4,6 @@ import NavMenu from './components/Navigation'
 import PostList from './components/PostList'
 import BlogPost from './components/BlogPost'
 import AuthorPage from './components/Author'
-import logo from './logo.svg'
 import './App.css'
 
 function App() {

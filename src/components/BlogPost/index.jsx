@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import { Heading, Box, Text } from 'rebass'
@@ -44,6 +46,7 @@ const BlogContainer = ({
 
 class BlogPost extends Component {
   render() {
+    // eslint-disable-next-line react/destructuring-assignment
     const { slug } = this.props.match.params
     return (
       <div>
@@ -51,12 +54,23 @@ class BlogPost extends Component {
           {({ loading, data, error }) => {
             if (loading) return <div>Loading...</div>
             if (error) return `Error... ${error}`
-            if (data) return <BlogContainer data={data} />
+            return <BlogContainer data={data} />
           }}
         </Query>
       </div>
     )
   }
+}
+
+BlogContainer.propTypes = {
+  data: PropTypes.shape({
+    author: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+    createdAt: PropTypes.string,
+    id: PropTypes.string,
+    slug: PropTypes.string,
+  }).isRequired,
 }
 
 export default BlogPost

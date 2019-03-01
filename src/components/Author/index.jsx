@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import { Box, Heading } from 'rebass'
@@ -43,6 +45,7 @@ const AuthorContainer = ({ author }) => {
 
 class AuthorPage extends Component {
   render() {
+    // eslint-disable-next-line react/destructuring-assignment
     const { username } = this.props.match.params
     return (
       <div>
@@ -50,12 +53,19 @@ class AuthorPage extends Component {
           {({ loading, data, error }) => {
             if (loading) return <div>Loading...</div>
             if (error) return `Error... ${error}`
-            if (data) return <AuthorContainer {...data} />
+            return <AuthorContainer {...data} />
           }}
         </Query>
       </div>
     )
   }
+}
+
+AuthorContainer.propTypes = {
+  author: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 export default AuthorPage
