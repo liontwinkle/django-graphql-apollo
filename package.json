@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@uplift-agency/interview-frontend",
+  "name": "django-graphql-apollo",
   "version": "0.1.0",
   "proxy": "http://localhost:5000",
   "license": "MIT",
